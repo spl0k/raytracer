@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from typing import List
 
 from .camera import Camera
@@ -6,9 +7,10 @@ from .math.color import Color
 from .renderable.renderable import Renderable
 
 
+@dataclass
 class Scene:
-    background: Color
-    ambient: Color
     cameras: List[Camera]
     lights: List[Light]
     objects: List[Renderable]
+    background: Color = field(default=Color(0, 0, 0, 1))
+    ambient: Color = field(default=Color(0, 0, 0, 1))

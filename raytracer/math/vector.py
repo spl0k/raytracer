@@ -1,15 +1,14 @@
 import math
 
+from dataclasses import dataclass
 
+
+@dataclass
 class Vector2:
     __slots__ = ("x", "y")
 
     x: float
     y: float
-
-    def __init__(self, x: float, y: float) -> None:
-        self.x = x
-        self.y = y
 
     def __str__(self) -> str:
         return f"({self.x}, {self.y})"
@@ -23,17 +22,13 @@ class Vector2:
         return math.sqrt(self.sqrlength)
 
 
+@dataclass
 class Vector3:
     __slots__ = ("x", "y", "z")
 
     x: float
     y: float
     z: float
-
-    def __init__(self, x: float, y: float, z: float) -> None:
-        self.x = x
-        self.y = y
-        self.z = z
 
     def __str__(self) -> str:
         return f"({self.x}, {self.y}, {self.z})"

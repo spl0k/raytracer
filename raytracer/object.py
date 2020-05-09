@@ -1,16 +1,25 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from dataclasses import dataclass
+from typing import Optional, Union
 
 from .math.vector import Vector3
-from .math.quaternion import Quaternion
+from .math.quaternion import Quaternion, identity
 
 
+@dataclass
 class Object(ABC):
     position: Vector3
-    rotation: Quaternion
-    scale: Vector3
+    rotation: Union[Quaternion, Vector3, None]
+    scale: Optional[Vector3]
 
-    @abstractmethod
-    def __init__(self, p: Vector3, r: Quaternion, s: Vector3) -> None:
-        self.position = p
-        self.rotation = r
-        self.scale = s
+    def __post_init__(self):
+        # Default values without using dataclasses.field(default=...) as this
+        # would cause issues with fields from inherited class without a default
+
+        if self.rotation is None:
+            self.rotation = identity
+        elif isinstance(self.rotation, Vector3):
+            self.rotation = Quaternion.from_euler(self.rotation)
+
+        if self.scale is None:
+            self.scale = Vector3(1, 1, 1)

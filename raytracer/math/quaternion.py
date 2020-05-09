@@ -1,8 +1,11 @@
 import math
 
+from dataclasses import dataclass
+
 from .vector import Vector3
 
 
+@dataclass
 class Quaternion:
     __slots__ = ("x", "y", "z", "w")
 
@@ -10,12 +13,6 @@ class Quaternion:
     y: float
     z: float
     w: float
-
-    def __init__(self, x: float, y: float, z: float, w: float) -> None:
-        self.x = x
-        self.y = y
-        self.z = z
-        self.w = w
 
     @property
     def euler(self) -> Vector3:
@@ -33,10 +30,14 @@ class Quaternion:
         cosz_cosx = 1 - 2 * (self.x * self.x + self.y * self.y)
         z = math.atan2(sinz_cosx, cosz_cosx)
 
-        return Vector3(x, y, z)
+        return Vector3(math.degrees(x), math.degrees(y), math.degrees(z))
 
     @staticmethod
     def from_euler(euler: Vector3) -> "Quaternion":
+        euler = Vector3(
+            math.radians(euler.x), math.radians(euler.y), math.radians(euler.z)
+        )
+
         cx = math.cos(euler.x * 0.5)
         sx = math.sin(euler.x * 0.5)
         cy = math.cos(euler.y * 0.5)
@@ -50,3 +51,6 @@ class Quaternion:
         z = cz * cx * sy - sz * sx * cy
 
         return Quaternion(x, y, z, w)
+
+
+identity = Quaternion(0, 0, 0, 1)
