@@ -16,7 +16,8 @@ class MaterialProperties:
     normalMap: None = field(default=None)
 
 
-Shader = Callable[[MaterialProperties, "RaycastHit"], Color]
+Callback = Callable[[Color], None]
+Shader = Callable[[MaterialProperties, "RaycastHit", Callback], None]
 
 
 @dataclass
@@ -27,3 +28,6 @@ class Material:
 
     def __post_init__(self, shader_name):
         self.shader = shaders.__dict__[shader_name]
+
+    def evaluate(self, hit: "RaycastHit", callback: Callable[[Color], None]) -> None:
+        self.shader(self.props, hit, callback)  # type: ignore

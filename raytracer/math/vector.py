@@ -40,3 +40,13 @@ class Vector3:
     @property
     def length(self) -> float:
         return math.sqrt(self.sqrlength)
+
+    def __add__(self, other: "Vector3") -> "Vector3":
+        if not isinstance(other, Vector3):
+            return NotImplemented
+        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other: "Vector3") -> "Vector3":
+        if not isinstance(other, Vector3):
+            return NotImplemented
+        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)

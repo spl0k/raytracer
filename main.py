@@ -9,6 +9,7 @@ from raytracer.material import Material, Shader
 from raytracer.math.quaternion import Quaternion
 from raytracer.math.vector import Vector3
 from raytracer.raycasthit import RaycastHit
+from raytracer.raycaster import Raycaster
 from raytracer.renderable.renderable import Renderable, find_renderable_type
 from raytracer.scene import Scene
 
@@ -43,9 +44,11 @@ def main(infile, outfile, width, height):
         scenedef = yaml.load(instream, Loader=yaml.SafeLoader)
 
     scene = dacite.from_dict(Scene, scenedef, config=config)
+    caster = Raycaster(scene)
     for cam in scene.cameras:
-        cam.generate_initial_rays(width, height)
+        cam.generate_initial_rays(width, height, caster, scene.background)
 
+    caster.process()
 
 if __name__ == "__main__":
     main()
