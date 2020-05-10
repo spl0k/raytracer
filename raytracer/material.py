@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field, InitVar
-from typing import Callable
+from typing import Callable, TYPE_CHECKING
 
 from .math.color import Color
-from .raycasthit import RaycastHit
 from . import shaders
+
+if TYPE_CHECKING:
+    from .raycasthit import RaycastHit
 
 
 @dataclass
@@ -14,7 +16,7 @@ class MaterialProperties:
     normalMap: None = field(default=None)
 
 
-Shader = Callable[[MaterialProperties, RaycastHit], Color]
+Shader = Callable[[MaterialProperties, "RaycastHit"], Color]
 
 
 @dataclass

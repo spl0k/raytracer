@@ -2,20 +2,22 @@ import importlib
 
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Optional, Type
+from typing import Optional, Type, TYPE_CHECKING
 
-from ..material import Material
 from ..object import Object
-from ..ray import Ray
-from ..raycasthit import RaycastHit
+
+if TYPE_CHECKING:
+    from ..material import Material
+    from ..ray import Ray
+    from ..raycasthit import RaycastHit
 
 
 @dataclass
 class Renderable(Object):
-    material: Material
+    material: "Material"
 
     @abstractmethod
-    def intersects(self, ray: Ray) -> Optional[RaycastHit]:
+    def intersects(self, ray: "Ray") -> Optional["RaycastHit"]:
         ...
 
 

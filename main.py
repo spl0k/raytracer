@@ -3,9 +3,12 @@ import dacite
 import yaml
 
 from raytracer import shaders
-from raytracer.material import Shader
+from raytracer.camera import Camera
+from raytracer.light import Light
+from raytracer.material import Material, Shader
 from raytracer.math.quaternion import Quaternion
 from raytracer.math.vector import Vector3
+from raytracer.raycasthit import RaycastHit
 from raytracer.renderable.renderable import Renderable, find_renderable_type
 from raytracer.scene import Scene
 
@@ -16,10 +19,17 @@ def load_renderable(dict: dict) -> Renderable:
 
 
 config = dacite.Config(
+    forward_references={
+        "Camera": Camera,
+        "Light": Light,
+        "Material": Material,
+        "RaycastHit": RaycastHit,
+        "Renderable": Renderable,
+    },
     type_hooks={
         Renderable: load_renderable,
         Quaternion: lambda d: Quaternion.from_euler(Vector3(**d)),
-    }
+    },
 )
 
 
