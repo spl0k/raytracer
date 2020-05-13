@@ -15,10 +15,12 @@ Currently, nothing.
 - Maybe 3D models later
 - Ability to define some shader-inspired surface functions (could be more than a
   simple BRDF)
+- Experimenting a bit with some Python stuff
 
 ## Non-goals
 
 - A full/complete/whatever rendering engine
 - Realtime
-- Efficient
+- Efficiency
+- Being foolproof
 - Writing tests (yeah I know it's bad, but I can't be bothered)

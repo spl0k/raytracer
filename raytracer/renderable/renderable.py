@@ -7,9 +7,9 @@ from typing import Optional, Type, TYPE_CHECKING
 from ..object import Object
 
 if TYPE_CHECKING:
-    from ..material import Material
     from ..ray import Ray
     from ..raycasthit import RaycastHit
+    from .material import Material
 
 
 @dataclass
@@ -23,4 +23,4 @@ class Renderable(Object):
 
 def find_renderable_type(name: str) -> Type[Renderable]:
     m = importlib.import_module(f".{name}", __package__)
-    return m.__dict__[name[0].upper() + name[1:]]
+    return getattr(m, name[0].upper() + name[1:])
