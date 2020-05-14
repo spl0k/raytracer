@@ -1,13 +1,16 @@
 from dataclasses import dataclass, astuple
 from PIL import Image
+from typing import TYPE_CHECKING
 
 from .math.color import Color
 from .math.quaternion import Quaternion
 from .math.vector import Vector3
 from .object import Object
 from .ray import Ray
-from .raycaster import Raycaster, Callback
 from .raycasthit import RaycastHit
+
+if TYPE_CHECKING:
+    from .raycaster import Raycaster, Callback
 
 
 @dataclass
@@ -42,11 +45,11 @@ class Camera(Object):
                 hangle += hstep
             vangle += vstep
 
-    def __create_callback(self, x, y) -> Callback:
+    def __create_callback(self, x, y) -> "Callback":
         def set_color(color: Color) -> None:
             self.image.putpixel((x, y), astuple(color.as_color32()))
 
         def callback(hit: RaycastHit) -> None:
-            hit.obj.material.evaluate(hit, set_color)
+            hit.obj.shader.evaluate(hit, set_color)
 
         return callback

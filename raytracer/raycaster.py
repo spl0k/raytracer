@@ -10,7 +10,7 @@ Callback = Callable[[RaycastHit], None]
 
 
 class Raycaster:
-    def __init__(self, scene: "Scene") -> None:
+    def __init__(self, scene: Scene) -> None:
         self.__to_process: List[Tuple[Ray, Callback]] = []
         self.__scene = scene
 

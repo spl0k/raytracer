@@ -5,9 +5,8 @@ from .camera import Camera
 from .light import Light
 from .math.quaternion import Quaternion
 from .math.vector import Vector3
-from .raycasthit import RaycastHit
-from .renderable.material import Material, Shader
 from .renderable.renderable import Renderable, find_renderable_type
+from .renderable.shader import Shader
 from .renderable.shaders import get_shader
 from .scene import Scene
 
@@ -17,18 +16,16 @@ def load_renderable(dict: dict) -> Renderable:
     return dacite.from_dict(find_renderable_type(type), dict, config=config)
 
 
+def load_shader(dict: dict) -> Shader:
+    type = dict.pop("type")
+    return dacite.from_dict(get_shader(type), dict, config=config)
+
+
 config = dacite.Config(
-    forward_references={
-        "Camera": Camera,
-        "Light": Light,
-        "Material": Material,
-        "RaycastHit": RaycastHit,
-        "Renderable": Renderable,
-    },
     type_hooks={
         Renderable: load_renderable,
         Quaternion: lambda d: Quaternion.from_euler(Vector3(**d)),
-        Shader: get_shader,
+        Shader: load_shader,
     },
 )
 
