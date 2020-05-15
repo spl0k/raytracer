@@ -6,9 +6,9 @@ Using Python 3.6 for now.
 
 ## What can it render?
 
-![The void](void.png?raw=true)
+![Round](sphere.png?raw=true)
 
-If you stare into the void, the void stares back at you.
+This is not a circle.
 
 ## Goals
 
