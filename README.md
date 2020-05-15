@@ -6,7 +6,9 @@ Using Python 3.6 for now.
 
 ## What can it render?
 
-Currently, nothing.
+![The void](void.png?raw=true)
+
+If you stare into the void, the void stares back at you.
 
 ## Goals
 
