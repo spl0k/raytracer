@@ -3,6 +3,7 @@ import os.path
 
 from raytracer.raycaster import Raycaster
 from raytracer.sceneloader import load_scene
+from raytracer.utils import Stopwatch
 
 
 @click.command()
@@ -13,10 +14,17 @@ from raytracer.sceneloader import load_scene
 def main(infile: str, outfile: str, width: int, height: int):
     scene = load_scene(infile)
     caster = Raycaster(scene)
-    for cam in scene.cameras:
-        cam.generate_initial_rays(width, height, caster, scene.background)
+    sw = Stopwatch()
 
-    caster.process()
+    with sw:
+        for cam in scene.cameras:
+            cam.generate_initial_rays(width, height, caster, scene.background)
+    print(f"Initialization: {sw.measured:f}")
+
+    with sw:
+        caster.process()
+    print(f"Processing: {sw.measured:f}")
+    print(caster.stats)
 
     name, suffix = os.path.splitext(outfile)
     if not suffix:
@@ -26,8 +34,10 @@ def main(infile: str, outfile: str, width: int, height: int):
     else:
         name_format = f"{name}{suffix}"
 
-    for i, cam in enumerate(scene.cameras):
-        cam.image.save(name_format.format(i))
+    with sw:
+        for i, cam in enumerate(scene.cameras):
+            cam.image.save(name_format.format(i))
+    print(f"Writing result images: {sw.measured:f}")
 
 
 if __name__ == "__main__":
