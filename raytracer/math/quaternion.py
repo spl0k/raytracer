@@ -70,6 +70,10 @@ class Quaternion:
         len = math.sqrt(sqrlen)
         return Quaternion(self.x / len, self.y / len, self.z / len, self.w / len)
 
+    @property
+    def conjugate(self):
+        return Quaternion(-self.x, -self.y, -self.z, self.w)
+
     @overload
     def __mul__(self, other: float) -> "Quaternion":
         ...
@@ -105,12 +109,15 @@ class Quaternion:
 
     def __vec_mul(self, other: Vector3) -> Vector3:
         p = self.normalized
-        pc = Quaternion(-p.x, -p.y, -p.z, p.w)
+        pc = p.conjugate
         q = Quaternion(other.x, other.y, other.z, 0)
         rv = p * q * pc
         return Vector3(rv.x, rv.y, rv.z)
 
     def __rmul__(self, other: float) -> "Quaternion":
+        if not isinstance(other, float):
+            return NotImplemented
+
         return Quaternion(
             self.x * other, self.y * other, self.z * other, self.w * other
         )

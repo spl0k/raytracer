@@ -43,7 +43,15 @@ class Vector3:
 
     @property
     def normalized(self):
-        return self * (1 / self.length)
+        sqrlen = self.sqrlength
+        if math.isclose(sqrlen, 1):
+            return self
+
+        len = math.sqrt(sqrlen)
+        return Vector3(self.x / len, self.y / len, self.z / len)
+
+    def __neg__(self) -> "Vector3":
+        return Vector3(-self.x, -self.y, -self.z)
 
     def __add__(self, other: "Vector3") -> "Vector3":
         if not isinstance(other, Vector3):
