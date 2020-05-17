@@ -1,5 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass
+from functools import cached_property
 
 from .math.matrix import Matrix3x4
 from .math.quaternion import Quaternion
@@ -12,11 +13,11 @@ class Object(ABC):
     rotation: Quaternion
     scale: Vector3
 
-    @property
+    @cached_property
     def local_to_world_matrix(self) -> Matrix3x4:
         return Matrix3x4.trs(self.position, self.rotation, self.scale)
 
-    @property
+    @cached_property
     def world_to_local_matrix(self) -> Matrix3x4:
         return Matrix3x4.trs(
             -self.position,
