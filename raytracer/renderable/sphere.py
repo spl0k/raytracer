@@ -13,7 +13,7 @@ class Sphere(Renderable):
     def intersects(self, ray: Ray) -> Optional[RaycastHit]:
         w2l = self.world_to_local_matrix
         o = -(w2l * ray.origin)
-        d = (w2l * ray.direction).normalized
+        d = w2l.mul_dir(ray.direction, True)
 
         t = Vector3.dot(o, d)
         if t < 0.0:
@@ -26,4 +26,4 @@ class Sphere(Renderable):
         pos = -o + d * (t - sqrt(1 - d2))
 
         l2w = self.local_to_world_matrix
-        return RaycastHit(self, l2w * pos, (l2w * pos).normalized)
+        return RaycastHit(self, l2w * pos, l2w.mul_dir(pos, True))

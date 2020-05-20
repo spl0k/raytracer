@@ -35,6 +35,32 @@ class Matrix3x4:
         )
         return Vector3(x, y, z)
 
+    def mul_dir(self, other: Vector3, keep_length: bool = False) -> Vector3:
+        """ Multiplies a direction. Only uses the rotate and scale part of the
+        matrix and optionnaly ensure the resulting vector keeps the same length """
+
+        x = (
+            self.__m[0][0] * other.x
+            + self.__m[0][1] * other.y
+            + self.__m[0][2] * other.z
+        )
+        y = (
+            self.__m[1][0] * other.x
+            + self.__m[1][1] * other.y
+            + self.__m[1][2] * other.z
+        )
+        z = (
+            self.__m[2][0] * other.x
+            + self.__m[2][1] * other.y
+            + self.__m[2][2] * other.z
+        )
+        rv = Vector3(x, y, z)
+
+        if keep_length:
+            rv = rv.normalized * other.length
+
+        return rv
+
     @staticmethod
     def trs(t: Vector3, r: Quaternion, s: Vector3) -> "Matrix3x4":
         m = Matrix3x4()
