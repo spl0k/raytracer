@@ -7,22 +7,16 @@ from .math.quaternion import Quaternion
 from .math.vector import Vector3
 from .object import Object
 from .ray import Ray
+from .raycaster import Raycaster, Callback
 from .raycasthit import RaycastHit
-
-if TYPE_CHECKING:
-    from .raycaster import Raycaster, Callback
 
 
 @dataclass
 class Camera(Object):
     vfov: float
 
-    def generate_initial_rays(
-        self, width: int, height: int, raycaster: "Raycaster", background: Color
-    ) -> None:
-        self.image = Image.new(
-            "RGBA", (width, height), astuple(background.as_color32())
-        )
+    def generate_initial_rays(self, width: int, height: int, background: Color) -> None:
+        self.image = Image.new("RGB", (width, height), astuple(background.as_color24()))
 
         aspect = width / height
         hfov = self.vfov * aspect
@@ -40,14 +34,14 @@ class Camera(Object):
                     * self.rotation
                     * Vector3(0, 0, 1),
                 )
-                raycaster.add_ray(ray, self.__create_callback(x, y))
+                Raycaster.instance.add_ray(ray, self.__create_callback(x, y))
 
                 hangle += hstep
             vangle += vstep
 
-    def __create_callback(self, x, y) -> "Callback":
+    def __create_callback(self, x, y) -> Callback:
         def set_color(color: Color) -> None:
-            self.image.putpixel((x, y), astuple(color.as_color32()))
+            self.image.putpixel((x, y), astuple(color.as_color24()))
 
         def callback(hit: RaycastHit) -> None:
             hit.obj.shader.evaluate(hit, set_color)

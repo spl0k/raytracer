@@ -18,8 +18,6 @@ Do you like shields? Here are some.
 
 ![Round](sphere.png?raw=true)
 
-This is not a circle.
-
 ## Goals
 
 - Rendering a scene defined in some files (in YAML, probably)

@@ -18,7 +18,7 @@ def main(infile: str, outfile: str, width: int, height: int):
 
     with sw:
         for cam in scene.cameras:
-            cam.generate_initial_rays(width, height, caster, scene.background)
+            cam.generate_initial_rays(width, height, scene.background)
     print(f"Initialization: {sw.measured:f}")
 
     with sw:
