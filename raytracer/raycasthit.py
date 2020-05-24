@@ -8,5 +8,6 @@ from .renderable.renderable import Renderable
 @dataclass
 class RaycastHit:
     obj: Renderable
+    direction: Vector3
     position: Vector3
     normal: Vector3

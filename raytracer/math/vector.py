@@ -73,3 +73,7 @@ class Vector3:
     @staticmethod
     def dot(a: "Vector3", b: "Vector3") -> float:
         return a.x * b.x + a.y * b.y + a.z * b.z
+
+    @staticmethod
+    def reflect(dir: "Vector3", normal: "Vector3") -> "Vector3":
+        return dir - 2 * Vector3.dot(dir, normal) * normal

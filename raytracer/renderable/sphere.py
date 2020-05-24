@@ -26,4 +26,4 @@ class Sphere(Renderable):
         pos = -o + d * (t - sqrt(1 - d2))
 
         l2w = self.local_to_world_matrix
-        return RaycastHit(self, l2w * pos, l2w.mul_dir(pos, True))
+        return RaycastHit(self, ray.direction, l2w * pos, l2w.mul_dir(pos, True))

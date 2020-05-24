@@ -20,6 +20,8 @@ class Plane(Renderable):
             t = Vector3.dot(-o, n) / dot
             if t >= 0.000001:
                 l2w = self.local_to_world_matrix
-                return RaycastHit(self, l2w * (o + d * t), l2w.mul_dir(n, True))
+                return RaycastHit(
+                    self, ray.direction, l2w * (o + d * t), l2w.mul_dir(n, True)
+                )
 
         return None
