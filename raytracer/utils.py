@@ -1,5 +1,14 @@
 import time
 
+from typing import Any, Awaitable, Tuple, TypeVar
+
+T = TypeVar("T")
+U = TypeVar("U")
+
+
+async def add_results(awaitable: Awaitable[T], arg: U) -> Tuple[T, U]:
+    return (await awaitable, arg)
+
 
 class Stopwatch:
     def __init__(self):

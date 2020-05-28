@@ -4,9 +4,9 @@ from typing import Optional, Type
 
 from ..math.color import Color
 from ..math.vector import Vector3
-from ..raycaster import Raycaster, LightCBParam
+from ..raycaster import Raycaster
 from ..raycasthit import RaycastHit
-from .shader import Shader, Callback
+from .shader import Shader
 
 
 def get_shader(name: str) -> Type[Shader]:
@@ -17,8 +17,8 @@ def get_shader(name: str) -> Type[Shader]:
 class Unlit(Shader):
     color: Color
 
-    def evaluate(self, hit: RaycastHit, callback: Callback) -> None:
-        callback(self.color)
+    async def evaluate(self, hit: RaycastHit) -> Color:
+        return self.color
 
 
 class LitShader(Shader, ABC):
@@ -28,17 +28,14 @@ class LitShader(Shader, ABC):
     ) -> Color:
         ...
 
-    def evaluate(self, hit: RaycastHit, callback: Callback) -> None:
-        def got_lights(lights: LightCBParam) -> None:
-            rv = Color(0, 0, 0)
-            for color, dir in lights:
-                rv += self._evaluate_light(color, dir, hit)
+    async def evaluate(self, hit: RaycastHit) -> Color:
+        rv = Color(0, 0, 0)
+        for color, dir in await Raycaster.instance.get_lights_from(
+            hit.position + hit.normal * 0.000001
+        ):
+            rv += self._evaluate_light(color, dir, hit)
 
-            callback(rv)
-
-        Raycaster.instance.get_lights_from(
-            hit.position + hit.normal * 0.000001, got_lights
-        )
+        return rv
 
 
 @dataclass
